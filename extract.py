@@ -8,11 +8,12 @@ def getMessages(channel_id, before, wait_time):
     time.sleep(wait_time)
     holder = []
     channel_id = str(channel_id)
+    before = str(before)
 
-    if before != -1:
+    if before == "-1":
         x = requests.get(url=f"https://discord.com/api/v9/channels/{channel_id}/messages?limit=50", headers= {"Authorization": getToken()})
     else:
-        x = requests.get(url=f"https://discord.com/api/v9/channels/{channel_id}/messages?limit=50", headers= {"Authorization": getToken()})
+        x = requests.get(url=f"https://discord.com/api/v9/channels/{channel_id}/messages?before={before}&limit=50", headers= {"Authorization": getToken()})
     
     if x.status_code != 200:
         return None
@@ -46,4 +47,6 @@ def getAllMessages(channel_id, before, wait_time):
         if len(data) != 50:
             break
         b4 = data[49]["id"]
+        # print(data)
+        # print("==================================")
     return holder[::1]
