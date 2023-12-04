@@ -28,9 +28,12 @@ def getMessages(channel_id, before, wait_time):
         else:
             hasEdit = False
             editTs = None
+        attachments = {}
+        if len(msg["attachments"]) != 0:
+            attachments = {"url": msg["attachments"][0]["url"]}
         author = {"username": msg["author"]["username"], "userID": msg["author"]["id"], "avatar_url": f"https://cdn.discordapp.com/avatars/{msg['author']['id']}/{msg['author']['avatar']}.webp?size=32", "nickname": msg["author"]["global_name"]}
         edits = {"hasEdits": hasEdit, "edit_timestamp": editTs}
-        end_product = {"content": content, "id": msg_id, "timestamp": ts, "edits": edits, "author": author}
+        end_product = {"content": content, "id": msg_id, "timestamp": ts, "edits": edits, "author": author, "attachments": attachments}
         
         holder.append(end_product)
     
