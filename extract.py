@@ -32,3 +32,5 @@ def getMessages(channel_id, limit, before):
         end_product = {"content": content, "id": msg_id, "timestamp": ts, "edits": edits, "author": author}
         
         holder.append(end_product)
+        
+    return holder

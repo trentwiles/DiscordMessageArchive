@@ -1,4 +1,4 @@
-import main
+import extract
 
 
-main.getMessages(497185813264859137, 50, -1)
+print(extract.getMessages(497185813264859137, 50, -1))
