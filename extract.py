@@ -1,18 +1,18 @@
 import requests
-import json
+import time
 
 def getToken():
     return open("token.txt").read()
 
-def getMessages(channel_id, limit, before):
+def getMessages(channel_id, before, wait_time):
+    time.sleep(wait_time)
     holder = []
-    limit = str(limit)
     channel_id = str(channel_id)
 
     if before != -1:
-        x = requests.get(url=f"https://discord.com/api/v9/channels/{channel_id}/messages?limit={limit}", headers= {"Authorization": getToken()})
+        x = requests.get(url=f"https://discord.com/api/v9/channels/{channel_id}/messages?limit=50", headers= {"Authorization": getToken()})
     else:
-        x = requests.get(url=f"https://discord.com/api/v9/channels/{channel_id}/messages?limit={limit}", headers= {"Authorization": getToken()})
+        x = requests.get(url=f"https://discord.com/api/v9/channels/{channel_id}/messages?limit=50", headers= {"Authorization": getToken()})
     
     if x.status_code != 200:
         return None
@@ -32,5 +32,18 @@ def getMessages(channel_id, limit, before):
         end_product = {"content": content, "id": msg_id, "timestamp": ts, "edits": edits, "author": author}
         
         holder.append(end_product)
-        
+    
     return holder
+    #return holder.reverse() + getMessages(channel_id, limit)
+
+
+def getAllMessages(channel_id, before, wait_time):
+    holder = []
+    b4 = before
+    while True:
+        data = getMessages(channel_id, b4, wait_time)
+        holder.append(data)
+        if len(data) != 50:
+            break
+        b4 = data[49]["id"]
+    return holder[::1]
