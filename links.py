@@ -13,6 +13,9 @@ def scanServers(wait_time):
                 holder.append({"id": ch["id"], "name": ch["name"]})
     return holder
 
-data = scanServers(2)
-print(data)
-print(len(data))
+def scanForLinks(server_data, wait_time, channel_limit):
+    for channel in server_data:
+        data = extract.getLimitedMessages(channel["id"], -1, 2, 200)
+        for x in data:
+            if "/invite" in x["content"]:
+                print(x)

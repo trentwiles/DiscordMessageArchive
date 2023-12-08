@@ -54,3 +54,16 @@ def getAllMessages(channel_id, before, wait_time):
         # print(data)
         # print("==================================")
     return holder[::1]
+
+def getLimitedMessages(channel_id, before, wait_time, limit):
+    holder = []
+    b4 = before
+    while limit > len(holder):
+        data = getMessages(channel_id, b4, wait_time)
+        holder.append(data)
+        if len(data) != 50:
+            break
+        b4 = data[49]["id"]
+        # print(data)
+        # print("==================================")
+    return holder[::1]
