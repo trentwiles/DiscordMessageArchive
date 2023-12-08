@@ -5,6 +5,7 @@ def getToken():
     return open("token.txt").read()
 
 def getMessages(channel_id, before, wait_time):
+    mcount = 0
     time.sleep(wait_time)
     holder = []
     channel_id = str(channel_id)
