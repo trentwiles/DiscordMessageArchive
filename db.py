@@ -23,8 +23,19 @@ CREATE TABLE msg (
 ); 
 """
 
-def ins(content, image, sent_by, serverID, messageID, epoch):
-    res = connect().execute(text(f"INSERT INTO msg (content, image, sent_by, serverID, messageID, epoch) VALUES ('{content}', '{image}', '{sent_by}', '{serverID}', '{messageID}', {epoch});"))
+def insMessage(content, image, sent_by, serverID, messageID, epoch):
+    stmt = text("INSERT INTO msg (content, image, sent_by, serverID, messageID, epoch) VALUES (:content, :image, :sent_by, :serverID, :messageID, :epoch)")
+
+    params = {
+        'content': content,
+        'image': 'none',
+        'sent_by': sent_by,
+        'serverID': serverID,
+        'messageID': messageID,
+        'epoch': epoch
+    }
+
+    connect().execute(stmt, params)
 
 def deleteAll():
     res = connect().execute(text("delete from msg where 0=0;"))

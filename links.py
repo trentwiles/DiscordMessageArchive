@@ -1,6 +1,7 @@
 import extract
 import requests
 import time
+import db
 
 def scanServers(wait_time):
     holder = []
@@ -14,8 +15,7 @@ def scanServers(wait_time):
     return holder
 
 def scanForLinks(server_data, wait_time, channel_limit):
-    for channel in server_data:
-        data = extract.getLimitedMessages(channel["id"], -1, 2, 200)
-        for x in data:
-            if "/invite" in x["content"]:
-                print(x)
+    data = extract.getLimitedMessages(server_data["id"], -1, wait_time, channel_limit)
+    for x in data:
+        for y in x:
+            db.insMessage(y["content"], "none", y["author"]["username"], server_data["id"], y["id"], 0)
