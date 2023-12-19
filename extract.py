@@ -61,7 +61,8 @@ def getLimitedMessages(channel_id, before, wait_time, limit):
     while limit > len(holder):
         data = getMessages(channel_id, b4, wait_time)
         holder.append(data)
-        if len(data) != 50:
+        # buller's short circuit
+        if data == None or len(data) != 50:
             break
         b4 = data[49]["id"]
         # print(data)

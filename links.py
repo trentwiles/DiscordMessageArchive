@@ -17,5 +17,9 @@ def scanServers(wait_time):
 def extractAndIndex(server_data, wait_time, channel_limit):
     data = extract.getLimitedMessages(server_data["id"], -1, wait_time, channel_limit)
     for x in data:
+        print(x)
+        if x == None:
+            break
         for y in x:
-            db.insMessage(y["content"], "none", y["author"]["username"], server_data["id"], y["id"], 0)
+            db.insMessage(y["content"], "none", y["author"]["username"], server_data["id"], y["id"], round(time.time()))
+            print("entered message ID " + y["id"] + " into DB")

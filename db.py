@@ -1,41 +1,32 @@
-import os
-from sqlalchemy import create_engine, text
 import json
-
-username = json.loads(open("config.json").read())["username"]
-password = json.loads(open("config.json").read())["password"]
-address = json.loads(open("config.json").read())["address"]
-database = json.loads(open("config.json").read())["db"]
+import psycopg2
 
 def connect():
-    engine = create_engine(f"cockroachdb://{username}:{password}@{address}/{database}?sslmode=verify-full")
-    return engine.connect()
-
-# db structure
-"""
-CREATE TABLE msg (
-  content TEXT,
-  image TEXT,
-  sent_by VARCHAR(255),
-  serverID VARCHAR(255),
-  messageID VARCHAR(255),
-  epoch INT
-); 
-"""
+    creds = json.loads(open("config.json").read())
+    conn = psycopg2.connect(database=creds["DB_NAME"],
+                        host=creds["DB_HOST"],
+                        user=creds["DB_USER"],
+                        password=creds["DB_PASSWORD"],
+                        port=creds["DB_PORT"])
+    return [conn, conn.cursor()]
 
 def insMessage(content, image, sent_by, serverID, messageID, epoch):
-    stmt = text("INSERT INTO msg (content, image, sent_by, serverID, messageID, epoch) VALUES (:content, :image, :sent_by, :serverID, :messageID, :epoch)")
+    x = connect()
+    connection = x[0]
+    cursor = x[1]
 
-    params = {
-        'content': content,
-        'image': 'none',
-        'sent_by': sent_by,
-        'serverID': serverID,
-        'messageID': messageID,
-        'epoch': epoch
-    }
+    insert_statement = """
+            INSERT INTO msg (content, image, sent_by, serverID, messageID, epoch)
+            VALUES (%s, %s, %s, %s, %s, %s);
+        """
+    
+    cursor.execute(insert_statement, (
+        content,
+        "none",
+        sent_by,
+        serverID,
+        messageID,
+        epoch
+    ))
 
-    connect().execute(stmt, params)
-
-def deleteAll():
-    res = connect().execute(text("delete from msg where 0=0;"))
+    connection.commit()
