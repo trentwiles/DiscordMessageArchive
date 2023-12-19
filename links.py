@@ -14,7 +14,7 @@ def scanServers(wait_time):
                 holder.append({"id": ch["id"], "name": ch["name"]})
     return holder
 
-def scanForLinks(server_data, wait_time, channel_limit):
+def extractAndIndex(server_data, wait_time, channel_limit):
     data = extract.getLimitedMessages(server_data["id"], -1, wait_time, channel_limit)
     for x in data:
         for y in x:
