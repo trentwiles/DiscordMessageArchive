@@ -15,7 +15,7 @@ def scanServers(wait_time):
     return holder
 
 def extractAndIndex(server_data, wait_time, channel_limit):
-    data = extract.getLimitedMessages(server_data["id"], -1, wait_time, channel_limit)
+    data = extract.getAllMessages(server_data["id"], -1, wait_time)
     for x in data:
         print(x)
         if x == None:

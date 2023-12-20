@@ -6,7 +6,9 @@ def getToken():
 
 def getMessages(channel_id, before, wait_time):
     mcount = 0
-    time.sleep(wait_time)
+    print("starting to sleep for " + str(channel_id) + " before " + str(before))
+    time.sleep(2)
+    print("ending the sleep for " + str(channel_id) + " before " + str(before))
     holder = []
     channel_id = str(channel_id)
     before = str(before)
@@ -47,6 +49,8 @@ def getAllMessages(channel_id, before, wait_time):
     b4 = before
     while True:
         data = getMessages(channel_id, b4, wait_time)
+        if data == None:
+            break
         holder.append(data)
         if len(data) != 50:
             break
